@@ -1,0 +1,140 @@
+### ProxyAPI - HTTP Request Testing File
+### Use this file with VS Code REST Client extension or Visual Studio
+### Base URL - Update the port if needed
+@baseUrl = https://localhost:5001
+@token = YOUR_TOKEN_HERE
+
+### ==============================================
+### AUTHENTICATION ENDPOINTS
+### ==============================================
+
+### 1. Register Admin User
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Admin User",
+  "email": "admin@example.com",
+  "password": "Admin123!",
+  "role": "Admin"
+}
+
+### 2. Register Normal User
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "User123!",
+  "role": "User"
+}
+
+### 3. Login as Admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin123!"
+}
+
+### 4. Login as Normal User
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "User123!"
+}
+
+### 5. Get Current User Profile (Requires Authentication)
+GET {{baseUrl}}/api/auth/profile
+Authorization: Bearer {{token}}
+
+### ==============================================
+### USER MANAGEMENT ENDPOINTS
+### ==============================================
+
+### 6. Get All Users (Admin Only)
+GET {{baseUrl}}/api/user/all
+Authorization: Bearer {{token}}
+
+### 7. Update Own Profile
+PUT {{baseUrl}}/api/user/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Updated Name"
+}
+
+### 8. Delete User by ID (Admin Only)
+DELETE {{baseUrl}}/api/user/2
+Authorization: Bearer {{token}}
+
+### ==============================================
+### PRODUCT ENDPOINTS (EF Core + Dapper Demo)
+### ==============================================
+
+### 9. Create Product (EF Core - Admin Only)
+POST {{baseUrl}}/api/product
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Laptop",
+  "description": "High-performance laptop for developers",
+  "price": 1299.99,
+  "stock": 50
+}
+
+### 10. Create Another Product
+POST {{baseUrl}}/api/product
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Wireless Mouse",
+  "description": "Ergonomic wireless mouse",
+  "price": 29.99,
+  "stock": 200
+}
+
+### 11. Get All Products (Dapper)
+GET {{baseUrl}}/api/product
+Authorization: Bearer {{token}}
+
+### 12. Get Product by ID (Dapper)
+GET {{baseUrl}}/api/product/1
+Authorization: Bearer {{token}}
+
+### 13. Search Products by Name (Dapper)
+GET {{baseUrl}}/api/product/search?name=laptop
+Authorization: Bearer {{token}}
+
+### 14. Update Product (EF Core - Admin Only)
+PUT {{baseUrl}}/api/product/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Gaming Laptop",
+  "description": "Ultimate gaming laptop with RTX 4090",
+  "price": 2499.99,
+  "stock": 25
+}
+
+### 15. Delete Product (Dapper - Admin Only)
+DELETE {{baseUrl}}/api/product/3
+Authorization: Bearer {{token}}
+
+### ==============================================
+### DASHBOARD ENDPOINTS
+### ==============================================
+
+### 16. Get All Customers (Admin Only)
+GET {{baseUrl}}/api/dashboard/customers
+Authorization: Bearer {{token}}
+
+###
