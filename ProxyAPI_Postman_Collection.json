@@ -1,0 +1,1329 @@
+{
+	"info": {
+		"_postman_id": "proxyapi-complete-collection",
+		"name": "ProxyAPI - Complete Collection (Updated)",
+		"description": "✅ UPDATED - Complete API collection for ProxyAPI\n\n📦 Includes:\n• Authentication (OTP, JWT)\n• Products (with Image & IsActive fields)\n• Variants (with key statistics)\n• CD Keys (Bulk Add with Duplicate Detection)\n• ⭐ Sold Keys (NEW - Track sales with user info)\n• Dashboard Statistics\n• User Management\n\n🆕 New Features:\n✅ Product statistics aggregation\n✅ Bulk key addition\n✅ Automatic duplicate detection\n✅ Sold keys tracking with filters\n✅ Search and date range filtering\n\n🚀 Base URL: https://api.realproxy.store\n📅 Updated: December 2024",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data.token) {",
+									"    pm.environment.set(\"jwt_token\", jsonData.data.token);",
+									"    console.log(\"Token saved: \" + jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/send-otp",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"send-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"otp\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/verify-otp",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verify-otp"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Get Dashboard Stats",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"stats"
+							]
+						},
+						"description": "Get overall dashboard statistics (total products, variants, keys, users, orders)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Products Summary",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/products-summary",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"products-summary"
+							]
+						},
+						"description": "Get products with variants and key counts (matches UI Screenshot 1)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/dashboard/customers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"dashboard",
+								"customers"
+							]
+						},
+						"description": "Get all customers from user_details table"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/product",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"product"
+							]
+						},
+						"description": "Get all active products with aggregated statistics (variant count, total keys, available keys, sold keys)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/product/{{product_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"{{product_id}}"
+							]
+						},
+						"description": "Get product details with all variants and their key statistics"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/product/search?name=ABC",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "ABC"
+								}
+							]
+						},
+						"description": "Search products by name with statistics"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data.id) {",
+									"    pm.environment.set(\"product_id\", jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"ABC GB\",\n  \"description\": \"128 GB Proxy Keys\",\n  \"image\": \"/images/abc.png\",\n  \"isActive\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/product",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"product"
+							]
+						},
+						"description": "Create a new product with image and isActive flag"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"ABC GB Updated\",\n  \"description\": \"256 GB Proxy Keys\",\n  \"image\": \"/images/abc-updated.png\",\n  \"isActive\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/product/{{product_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"{{product_id}}"
+							]
+						},
+						"description": "Update product with new image and active status"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/product/{{product_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"{{product_id}}"
+							]
+						},
+						"description": "Delete a product (only if it has no variants)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Variants",
+			"item": [
+				{
+					"name": "Get All Variants",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/variant",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"variant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Variants By Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/variant/product/{{product_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"variant",
+								"product",
+								"{{product_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Variant By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/variant/{{variant_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"variant",
+								"{{variant_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Variant - 1GB",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data.id) {",
+									"    pm.environment.set(\"variant_id\", jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": {{product_id}},\n  \"name\": \"1GB\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/variant",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"variant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Variant - 2GB",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": {{product_id}},\n  \"name\": \"2GB\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/variant",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"variant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Variant - 5GB",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": {{product_id}},\n  \"name\": \"5GB\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/variant",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"variant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Variant - 10GB",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": {{product_id}},\n  \"name\": \"10GB\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/variant",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"variant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Variant",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": {{product_id}},\n  \"name\": \"1.5GB\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/variant/{{variant_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"variant",
+								"{{variant_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Variant",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/variant/{{variant_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"variant",
+								"{{variant_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CD Keys",
+			"item": [
+				{
+					"name": "Get All Keys",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cdkey",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Keys With Filters",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cdkey?productId={{product_id}}&variantId={{variant_id}}&status=Available&sortBy=Newest",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "{{product_id}}"
+								},
+								{
+									"key": "variantId",
+									"value": "{{variant_id}}"
+								},
+								{
+									"key": "status",
+									"value": "Available"
+								},
+								{
+									"key": "sortBy",
+									"value": "Newest"
+								}
+							]
+						},
+						"description": "Filter keys by product, variant, status, and sort order"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Keys By Product and Variant",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cdkey/product/{{product_id}}/variant/{{variant_id}}?status=Available",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey",
+								"product",
+								"{{product_id}}",
+								"variant",
+								"{{variant_id}}"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "Available"
+								}
+							]
+						},
+						"description": "Get keys for specific product/variant (matches UI Screenshot 2)"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Multiple CD Keys (Bulk Add)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": {{product_id}},\n  \"variantId\": {{variant_id}},\n  \"keys\": [\n    \"xyz-abc-a12\",\n    \"xyz-abc-a13\",\n    \"xyz-abc-a14\",\n    \"xyz-abc-a15\",\n    \"xyz-abc-a16\",\n    \"xyz-abc-a17\"\n  ],\n  \"status\": \"Available\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cdkey",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey"
+							]
+						},
+						"description": "✅ Bulk add multiple keys at once\n✅ Automatic duplicate detection\n✅ Auto-updates variant statistics (TotalKeys, AvailableKeys)\n✅ Matches UI Screenshot 3"
+					},
+					"response": []
+				},
+				{
+					"name": "Test Duplicate Key Detection",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": {{product_id}},\n  \"variantId\": {{variant_id}},\n  \"keys\": [\n    \"xyz-abc-a12\",\n    \"xyz-abc-new-key\"\n  ],\n  \"status\": \"Available\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cdkey",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey"
+							]
+						},
+						"description": "Test duplicate detection - xyz-abc-a12 should be rejected if already exists"
+					},
+					"response": []
+				},
+				{
+					"name": "Add More Keys - Batch 2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": {{product_id}},\n  \"variantId\": {{variant_id}},\n  \"keys\": [\n    \"xyz-abc-b01\",\n    \"xyz-abc-b02\",\n    \"xyz-abc-b03\",\n    \"xyz-abc-b04\",\n    \"xyz-abc-b05\"\n  ],\n  \"status\": \"Available\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cdkey",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sold Keys - All ⭐",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cdkey/sold",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey",
+								"sold"
+							]
+						},
+						"description": "⭐ NEW ENDPOINT ⭐\n\nGet all sold keys with complete tracking:\n✅ Key Value\n✅ Product Name\n✅ Variant Name\n✅ User Email (who purchased)\n✅ Sold Date\n\nOrdered by most recent first.\nMatches UI Screenshot 4 - Sold Keys Page"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sold Keys - Search by Keyword ⭐",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cdkey/sold?search=abc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey",
+								"sold"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "abc",
+									"description": "Searches across: Key Value, Product Name, User Email"
+								}
+							]
+						},
+						"description": "Search sold keys by keyword\n\nSearches in:\n✅ Key Value\n✅ Product Name\n✅ User Email"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sold Keys - Date Range Filter ⭐",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cdkey/sold?startDate=2024-01-01&endDate=2024-04-20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey",
+								"sold"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01",
+									"description": "Start date (YYYY-MM-DD)"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-04-20",
+									"description": "End date (YYYY-MM-DD)"
+								}
+							]
+						},
+						"description": "Filter sold keys by date range\n\nUse format: YYYY-MM-DD"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sold Keys - Combined Filters ⭐",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cdkey/sold?search=ABC&startDate=2024-01-01&endDate=2024-12-31",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey",
+								"sold"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "ABC",
+									"description": "Search keyword"
+								},
+								{
+									"key": "startDate",
+									"value": "2024-01-01",
+									"description": "Start date"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-12-31",
+									"description": "End date"
+								}
+							]
+						},
+						"description": "Combine search and date filters\n\nExample: Find all ABC product keys sold in 2024"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete CD Key",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cdkey/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cdkey",
+								"1"
+							]
+						},
+						"description": "Delete a key (only if not sold)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "Get User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/user/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe Updated\",\n  \"email\": \"john.doe@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://api.realproxy.store",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "product_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "variant_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}
